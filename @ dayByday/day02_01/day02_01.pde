@@ -9,6 +9,7 @@ Vec3D target;
 
 void setup() {
   size(900, 900, P3D);
+  //fullScreen(P3D, 2); // fullScreen(P3D);
 
   agents = new ArrayList<Agent>();
 

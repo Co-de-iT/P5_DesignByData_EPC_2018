@@ -5,6 +5,7 @@ class Agent {
   Vec3D pos, vel, acc; 
   float maxVel, maxForce;
   float sR, sI; // separation radius and intensity
+  float cR, cI; // cohesion radius and intensity
 
   // constructor
 
