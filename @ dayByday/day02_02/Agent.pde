@@ -14,14 +14,14 @@ class Agent {
     pos = _pos;
     vel = _vel;
     acc = new Vec3D();
-    maxVel = 1.0;
-    maxForce = 0.02;
-    sR = 10;
-    sI = 1.5;
+    maxVel = 1.5;
+    maxForce = 0.01;
+    sR = 15;
+    sI = 10;
     cR = 200;
-    cI = 0.6;
+    cI = 5;
     aR = 40;
-    aI = 0.6;
+    aI = 5;
   }
 
   // behaviors (methods)
@@ -147,7 +147,20 @@ class Agent {
     strokeWeight(2);
     point(pos.x, pos.y, pos.z);
   }
-  
-  
-  
+
+  void displayTri(float r) {
+
+    pushMatrix(); // enables temporary coordinates system
+    translate(pos.x, pos.y);
+    float theta = atan2(vel.y, vel.x) + PI*0.5;
+    rotate(theta);
+    stroke(0,80);
+    fill(255);
+    beginShape();
+    vertex(0, -r*2);
+    vertex(-r, r*2);
+    vertex(r, r*2);
+    endShape(CLOSE);
+    popMatrix(); // reverts to the previous CS
+  }
 }

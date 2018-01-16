@@ -11,6 +11,7 @@ Vec3D target;
 void setup() {
   size(900, 900, P3D);
   //fullScreen(P3D, 2); // fullScreen(P3D);
+  smooth(8);
 
   agents = new ArrayList<Agent>();
 
@@ -22,8 +23,7 @@ void setup() {
   }
 
   target = new Vec3D(width*0.5, height*0.5, 0);
-  background(0);
-  
+  background(200,0,0);
   
 }
 
@@ -38,14 +38,15 @@ void draw() {
     if (mousePressed) a.seek(target);
     a.flock(agents);
     a.update();
-    a.display();
+    //a.display();
+    a.displayTri(3);
   }
 
-  noStroke();
-  fill(5);
-  blendMode(SUBTRACT);
-  rect(0, 0, width, height);
-  blendMode(BLEND);
+  //noStroke();
+  //fill(3);
+  //blendMode(SUBTRACT);
+  //rect(0, 0, width, height);
+  //blendMode(BLEND);
 
   if (record) {
     saveFrame("video2/frame_####.jpg");
