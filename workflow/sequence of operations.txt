@@ -1,0 +1,16 @@
+Sequence of operations
+
+00 - model a mesh that works as a boundary for agent (and eventually field) containment
+01 - design a field
+02 - import and run bodies in Processing
+03 - export data and visualize
+
+
+design spaces:
+
+. mesh/containment
+. field
+. agent bodies
+. agent behaviors
+. post-work on network (eventual)
+
