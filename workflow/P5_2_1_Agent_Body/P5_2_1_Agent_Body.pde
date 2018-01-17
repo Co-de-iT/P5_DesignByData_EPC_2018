@@ -44,6 +44,14 @@
  i     save screenshot image
  v     video recording on/off
  
+ 
+ agent color code
+ 
+  gery/cyan: paused
+  white: active
+  black: aligned
+  pink: connected
+ 
  */
 
 import toxi.geom.*;
@@ -57,7 +65,7 @@ import java.util.*;
 
 void setup() {
 
-  size(1200, 900, P3D);
+  size(1400, 900, P3D);
   //fullScreen(P3D); // uncheck this and check size() to see the sketch fullscreen
   smooth(8);
 
@@ -86,17 +94,21 @@ void draw() {
   checkOverlap();
 
   if (go) { // run and display
-    for (AgentBody a : agents) {
-
-      if (lock) a.locked = true; // locks agents 
-      a.update(agents, 80, 10);
-      a.alignWithField(field, fA);
-      a.displayBody();
+    if (lock && !agentsLocked) {
+      agentsLocked = true;
+      for (AgentBody a : agents) {
+        a.locked = true; // locks agents
+      }
+    } else {
+      for (AgentBody a : agents) {
+        a.update(agents, 80, 80, 10);
+        a.alignWithField(field, fA);
+        a.displayBody(color(255),1);
+      }
     }
   } else { // just display
     for (AgentBody a : agents) {
-
-      a.displayBody();
+      a.displayBody(color(100, 120, 120),3);
     }
   }
 
@@ -104,7 +116,8 @@ void draw() {
   // display field
   if (fieldDisp) {
     for (TensorPt t : field) {
-      t.display(color(255), 5, color(255, 0, 0), 20);
+      //t.display(color(255), 1, color(255, 0, 0), 20);
+      t.display(1, 20);
     }
   }
 

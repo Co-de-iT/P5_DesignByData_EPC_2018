@@ -10,6 +10,20 @@ design spaces:
 
 . mesh/containment
 . field
+
+
+. agent positioning
+
+
+
+
+
+
+
+
+
+
+
 . agent bodies
 . agent behaviors
 . post-work on network (eventual)

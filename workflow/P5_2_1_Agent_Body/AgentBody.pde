@@ -37,19 +37,42 @@ class AgentBody {
     this(pos, vel, id, 0, locked); // creates a standard Body, type 0 (3-fork)
   }
 
-  void update(AgentBody[] agents, float aR, float sR) {
+  void update(AgentBody[] agents, float cR, float aR, float sR) {
     if (!locked) { 
-      separate(agents, sR);
+      cohesion(agents, cR);
+      separation(agents, sR);
       alignWithNeighbors(agents, aR);
     } else {
-      if (!aligned)alignBody();
+      if (!aligned) alignBody();
       if (!connected) {
         connect(agents);
       }
     }
   }
 
-  void separate(AgentBody[] agents, float sR) {
+  void cohesion(AgentBody[] agents, float cR) {
+
+    Vec3D steer = new Vec3D();
+    int cC=0;
+
+    for (int i=0; i< agents.length; i++) {
+      if (agents[i] != this) {
+        if (pos.distanceTo(agents[i].pos)<cR) {
+          cC++;
+          steer.addSelf(agents[i].pos.sub(pos)); // vector from self to other
+        }
+      }
+    }
+    if (cC >0 && cC < 20) {
+      steer.scaleSelf(1/(float)cC);
+      steer.scaleSelf(maxForce*0.1);
+      pos.addSelf(steer);
+      // vel.normalize();
+      plane = new Plane(pos, vel);
+    }
+  }
+
+  void separation(AgentBody[] agents, float sR) {
 
     Vec3D steer = new Vec3D();
     int sC=0;
@@ -64,7 +87,7 @@ class AgentBody {
     }
     if (sC >0) {
       steer.scaleSelf(1/(float)sC);
-      steer.scaleSelf(maxForce);
+      steer.scaleSelf(maxForce*5);
     }
     pos.addSelf(steer);
     // vel.normalize();
@@ -124,7 +147,7 @@ class AgentBody {
 
   void connect(AgentBody[] agents) {
     float rr, ang, dsq;
-    boolean haveconnect = false;
+    boolean haveConnect = false;
     Vec3D dir, target, average;
     // for each of our tips (t)
     for (Tip t : body.tips) {
@@ -155,7 +178,7 @@ class AgentBody {
                     ot.connections.add(t);
                     ot.connInd.add(new TIndex(id, t.id));
                     t.locked = true; 
-                    haveconnect = true;
+                    haveConnect = true;
                     break;
                   } else {
                     average = t.add(ot).scale(0.5);
@@ -167,19 +190,21 @@ class AgentBody {
                     ot.connInd.add(new TIndex(id, t.id));
                     t.locked = true;
                     ot.locked = true;
-                    haveconnect = true;
+                    haveConnect = true;
                     break;
                   }
                   //}
                 }
               }
-            }
+              if (haveConnect) break; // if a connection is found don't look for other connections
+            } // --- end for (Tip ot : other.body.tips)
           } // end if (other != this)
-        } // end for (AgentBody other : agents)
+        } // --- end for (AgentBody other : agents)
       } // end if (t.connections.size() < t.maxConn && !t.locked)
-      if (t.connections.size() == 0) t.locked = false;
-    } // end for (Tip t : body.tips)
-    if (!connected && haveconnect) connected = true;
+      if (t.connections.size() == 0) t.locked = false; 
+      else connected = true;
+    } // --- end for (Tip t : body.tips)
+    if (!connected && haveConnect) connected = true;
   }
 
   // connects only one closest tip and then stops
@@ -330,10 +355,10 @@ class AgentBody {
 
   // ___________________ display functions
 
-  void displayBody() {
-    strokeWeight(1);
+  void displayBody(color col, float sw) {
+    strokeWeight(sw);
     if (!locked) {
-      stroke(255);
+      stroke(col);
       Vec3D[] pts = alignPoints(body.tips, body.forward);
       for (Vec3D p : pts) {
         line(pos.x, pos.y, pos.z, p.x, p.y, p.z);
@@ -397,7 +422,7 @@ class AgentBody {
   }
 
   void displayPlane(float scale) {
-    fill(255);
+    fill(200);
     gfx.meshNormalMapped(plane.toMesh(scale), false);
   }
 

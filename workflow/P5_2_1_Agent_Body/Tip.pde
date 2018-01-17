@@ -52,11 +52,14 @@ class Tip extends Vec3D {
   }
 
   void display() {
-    strokeWeight(3);
+
     if (locked) {
       stroke (0); 
       strokeWeight(8);
-    } else stroke(255, 121, 233);
+    } else {
+      stroke(255, 121, 233);
+      strokeWeight(3);
+    }
     point(x, y, z);
   }
 }

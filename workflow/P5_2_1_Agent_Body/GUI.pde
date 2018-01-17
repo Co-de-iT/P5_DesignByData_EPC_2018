@@ -7,9 +7,9 @@ void dispGUI() {
   cam.beginHUD();
 
   c5.draw();
-  textSize(10);
-  fill(255, 0, 0);
-  text(frameCount, 10, height-10);
+  //textSize(10);
+  //fill(255, 0, 0);
+  //text(frameCount, 10, height-10);
 
   cam.endHUD();
 }
@@ -19,24 +19,24 @@ void initGui() {
   //                    hover color /  base color  / active color   / label color /  data label
   CColor gray = new CColor(color(180), color(120), color(255), color(255), color(0));  
   float x=10, y = 20;
-  int w=200, h=10;
+  int w=210, h=10;
   float dY = h+10;
 
   c5.setAutoDraw(false);
 
   // ______________________ sliders
 
-  
 
-   c5.addSlider("fA") // <<< use the variable name here
-   .setLabel("fAl")
-   .setPosition(x, y)
-   .setWidth(w).setHeight(h)
-   .setRange(0.00, 1.00).setValue(fA)
-   .setColor(gray);
-   //.getCaptionLabel().getStyle().marginRight=130;
-   
-   /*
+
+  c5.addSlider("fA") // <<< use the variable name here
+    .setLabel("fAl")
+    .setPosition(x, y)
+    .setWidth(w).setHeight(h)
+    .setRange(0.00, 1.00).setValue(fA)
+    .setColor(gray);
+  //.getCaptionLabel().getStyle().marginRight=130;
+
+  /*
    
    y+=dY;
    c5.addSlider("cI")
@@ -88,12 +88,13 @@ void initGui() {
    //.getCaptionLabel().getStyle().marginLeft=-30;
    */
 
-  // ______________________ toggles
+  // ______________________ toggles & buttons
 
   y+=dY*2;
-  int bW=35;
-  int bS = 55;
-  c5.addToggle("fieldDisp") // << the boolean variable controlled by the toggle
+  int bW=40;
+  int bS = 85;
+
+  c5.addToggle("fieldDisp")
     .setLabel("field")
     .setPosition(x, y)
     .setWidth(bW).setHeight(h)
@@ -105,18 +106,31 @@ void initGui() {
     .setWidth(bW).setHeight(h)
     .setColor(gray);
 
-
-  c5.addToggle("viewOct")
-    .setLabel("OcTree")
+  c5.addButton("saveImg") // << the button calls the function saveImg
+    .setLabel("img")
     .setPosition(x+bS*2, y)
+    .setWidth(bW).setHeight(h)
+    .setColor(gray)
+    .getCaptionLabel().getStyle().marginTop=13;
+
+
+  y+=dY*2;
+
+  c5.addToggle("go") // << the boolean variable controlled by the toggle
+    .setLabel("> - ||")
+    .setPosition(x, y)
     .setWidth(bW).setHeight(h)
     .setColor(gray);
 
-  // ______________________ buttons
+  c5.addToggle("lock")
+    .setLabel("lock")
+    .setPosition(x+bS, y)
+    .setWidth(bW).setHeight(h)
+    .setColor(gray);
 
-  c5.addButton("saveImg") // << the button calls the function saveImg
-    .setLabel("img")
-    .setPosition(x+bS*3, y)
+  c5.addButton("exprtBds") // << the button calls the function exprtBds
+    .setLabel("Xport")
+    .setPosition(x+bS*2, y)
     .setWidth(bW).setHeight(h)
     .setColor(gray)
     .getCaptionLabel().getStyle().marginTop=13;
@@ -125,4 +139,8 @@ void initGui() {
 void saveImg(int val) {
   // val (1) is returned each time the button is pressed
   saveFrame("img/flock_####.png");
+}
+
+void exprtBds(int val) {
+  exportBodies(agents, "_struct_topoXt");
 }

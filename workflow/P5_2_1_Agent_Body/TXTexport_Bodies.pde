@@ -15,7 +15,9 @@
 void exportBodies(AgentBody[] agents, String fileName) {
 
   // String eol = System.getProperty("line.separator"); // line separator character
-  String dir = "export_data/"+nf(frameCount, 4)+ fileName +".txt";
+  String timeStamp = year() + nf(month(),2) + nf(day(),2) + "-"  + nf(hour(),2) + nf(minute(),2) + nf(second(),2);
+  //String dir = "export_data/"+nf(frameCount, 4)+ fileName +".txt";
+  String dir = "export_data/"+timeStamp+ fileName +".txt";
   String cS =","; // coordinate separator
   String pS = " ";// point separator
   String aS = "_"; // argument separator
