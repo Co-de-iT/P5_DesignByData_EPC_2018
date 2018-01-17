@@ -15,7 +15,9 @@ void dispGUI() {
 }
 
 void initGui() {
-  CColor gray = new CColor(color(180), color(20), color(200), color(0), color(255));  //color combination for interface
+  //color combination for interface
+  //                    hover color /  base color  / active color   / label color /  data label
+  CColor gray = new CColor(color(180), color(120), color(255), color(255), color(0));  
   float x=10, y = 20;
   int w=200, h=10;
   float dY = h+10;
@@ -24,15 +26,17 @@ void initGui() {
 
   // ______________________ sliders
 
-  /*
+  
 
-   c5.addSlider("cR") // <<< use the variable name here
-   .setLabel("Cr")
+   c5.addSlider("fA") // <<< use the variable name here
+   .setLabel("fAl")
    .setPosition(x, y)
    .setWidth(w).setHeight(h)
-   .setRange(50, 300).setValue(cR)
+   .setRange(0.00, 1.00).setValue(fA)
    .setColor(gray);
    //.getCaptionLabel().getStyle().marginRight=130;
+   
+   /*
    
    y+=dY;
    c5.addSlider("cI")

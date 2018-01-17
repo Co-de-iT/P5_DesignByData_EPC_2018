@@ -3,6 +3,7 @@
 int nAgents = 2000;//3000
 float rad = 250;
 float pSize;
+float fA = 0.01; // field alignment intensity
 AgentBody[] agents;
 ToxiclibsSupport gfx;
 PeasyCam cam;

@@ -90,7 +90,7 @@ void draw() {
 
       if (lock) a.locked = true; // locks agents 
       a.update(agents, 80, 10);
-      a.alignWithField(field, 0.01);
+      a.alignWithField(field, fA);
       a.displayBody();
     }
   } else { // just display

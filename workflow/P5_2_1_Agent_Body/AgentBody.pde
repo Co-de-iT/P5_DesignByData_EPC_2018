@@ -123,7 +123,8 @@ class AgentBody {
   // . if the other tip is already locked but still in range, move there
 
   void connect(AgentBody[] agents) {
-    float rr, ang;
+    float rr, ang, dsq;
+    boolean haveconnect = false;
     Vec3D dir, target, average;
     // for each of our tips (t)
     for (Tip t : body.tips) {
@@ -133,8 +134,9 @@ class AgentBody {
         rr = t.rad*t.rad; // calculates squared radius (allows faster comparisons for distance)
         // scan all other agents
         for (AgentBody other : agents) {
+          dsq = pos.distanceToSquared(other.pos);
           // but don't scan yourself
-          if (other != this) { 
+          if (dsq > 0.001) {//(other != this) { 
             // scan all other agents' tips (ot)
             for (Tip ot : other.body.tips) {
               // if other tip hasn't reached max connections
@@ -153,6 +155,7 @@ class AgentBody {
                     ot.connections.add(t);
                     ot.connInd.add(new TIndex(id, t.id));
                     t.locked = true; 
+                    haveconnect = true;
                     break;
                   } else {
                     average = t.add(ot).scale(0.5);
@@ -164,6 +167,7 @@ class AgentBody {
                     ot.connInd.add(new TIndex(id, t.id));
                     t.locked = true;
                     ot.locked = true;
+                    haveconnect = true;
                     break;
                   }
                   //}
@@ -172,10 +176,10 @@ class AgentBody {
             }
           } // end if (other != this)
         } // end for (AgentBody other : agents)
-      } // end if t.conn
+      } // end if (t.connections.size() < t.maxConn && !t.locked)
       if (t.connections.size() == 0) t.locked = false;
     } // end for (Tip t : body.tips)
-    connected = true;
+    if (!connected && haveconnect) connected = true;
   }
 
   // connects only one closest tip and then stops
@@ -224,6 +228,7 @@ class AgentBody {
 
   // performs a cohesion among tips (to be implemented)
   void seekConnect(AgentBody[] agents) {
+    boolean haveconnect = false;
     float rr, ang;
     Vec3D dir, target, average;
     // for each of our tips (t)
@@ -252,6 +257,7 @@ class AgentBody {
                   ot.connections.add(t);
                   //t.locked = true;
                   //ot.locked = true;
+                  haveconnect = true;
                   //break;
                   //}
                 }
@@ -263,7 +269,7 @@ class AgentBody {
       } // end if t.conn
       if (t.connections.size() == 0) t.locked = false;
     } // end for (Tip t : body.tips)
-    connected = true;
+    if (haveconnect) connected = true;
   }
 
 
@@ -391,6 +397,7 @@ class AgentBody {
   }
 
   void displayPlane(float scale) {
+    fill(255);
     gfx.meshNormalMapped(plane.toMesh(scale), false);
   }
 
