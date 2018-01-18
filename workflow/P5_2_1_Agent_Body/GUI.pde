@@ -14,6 +14,7 @@ void dispGUI() {
   cam.endHUD();
 }
 
+
 void initGui() {
   //color combination for interface
   //                    hover color /  base color  / active color   / label color /  data label
@@ -26,8 +27,6 @@ void initGui() {
 
   // ______________________ sliders
 
-
-
   c5.addSlider("fA") // <<< use the variable name here
     .setLabel("fAl")
     .setPosition(x, y)
@@ -36,57 +35,62 @@ void initGui() {
     .setColor(gray);
   //.getCaptionLabel().getStyle().marginRight=130;
 
-  /*
-   
-   y+=dY;
-   c5.addSlider("cI")
-   .setLabel("Ci")
-   .setPosition(x, y)
-   .setWidth(w).setHeight(h)
-   .setRange(0.01, 0.20).setValue(cI)
-   .setColor(gray);
-   //.getCaptionLabel().getStyle().marginLeft=-30;
-   
-   y+=dY;
-   
-   y+=dY;
-   c5.addSlider("aR")
-   .setLabel("Ar")
-   .setPosition(x, y)
-   .setWidth(w).setHeight(h)
-   .setRange(10, 50).setValue(aR)
-   .setColor(gray);
-   //.getCaptionLabel().getStyle().marginLeft=-30;
-   
-   y+=dY;
-   c5.addSlider("aI")
-   .setLabel("Ai")
-   .setPosition(x, y)
-   .setWidth(w).setHeight(h)
-   .setRange(0.01, 0.15).setValue(aI)
-   .setColor(gray);
-   //.getCaptionLabel().getStyle().marginLeft=-30;
-   
-   y+=dY;
-   
-   y+=dY;
-   c5.addSlider("sR")
-   .setLabel("Sr")
-   .setPosition(x, y)
-   .setWidth(w).setHeight(h)
-   .setRange(1, 10).setValue(sR)
-   .setColor(gray);
-   //.getCaptionLabel().getStyle().marginLeft=-30;
-   
-   y+=dY;
-   c5.addSlider("sI")
-   .setLabel("Si")
-   .setPosition(x, y)
-   .setWidth(w).setHeight(h)
-   .setRange(0.1, 3).setValue(sI)
-   .setColor(gray);
-   //.getCaptionLabel().getStyle().marginLeft=-30;
-   */
+
+  y+=dY;
+  c5.addSlider("cR")
+    .setLabel("Cr")
+    .setPosition(x, y)
+    .setWidth(w).setHeight(h)
+    .setRange(20, 200).setValue(cR)
+    .setColor(gray);
+  //.getCaptionLabel().getStyle().marginLeft=-30;
+
+
+  y+=dY;
+  c5.addSlider("cI")
+    .setLabel("Ci")
+    .setPosition(x, y)
+    .setWidth(w).setHeight(h)
+    .setRange(0.01, 3).setValue(cI)
+    .setColor(gray);
+  //.getCaptionLabel().getStyle().marginLeft=-30;
+
+  y+=dY;
+  c5.addSlider("aR")
+    .setLabel("Ar")
+    .setPosition(x, y)
+    .setWidth(w).setHeight(h)
+    .setRange(10, 200).setValue(aR)
+    .setColor(gray);
+  //.getCaptionLabel().getStyle().marginLeft=-30;
+
+  y+=dY;
+  c5.addSlider("aI")
+    .setLabel("Ai")
+    .setPosition(x, y)
+    .setWidth(w).setHeight(h)
+    .setRange(0.01, 2).setValue(aI)
+    .setColor(gray);
+  //.getCaptionLabel().getStyle().marginLeft=-30;
+
+  y+=dY;
+  c5.addSlider("sR")
+    .setLabel("Sr")
+    .setPosition(x, y)
+    .setWidth(w).setHeight(h)
+    .setRange(1, 50).setValue(sR)
+    .setColor(gray);
+  //.getCaptionLabel().getStyle().marginLeft=-30;
+
+  y+=dY;
+  c5.addSlider("sI")
+    .setLabel("Si")
+    .setPosition(x, y)
+    .setWidth(w).setHeight(h)
+    .setRange(0.1, 10).setValue(sI)
+    .setColor(gray);
+  //.getCaptionLabel().getStyle().marginLeft=-30;
+
 
   // ______________________ toggles & buttons
 
@@ -128,9 +132,17 @@ void initGui() {
     .setWidth(bW).setHeight(h)
     .setColor(gray);
 
+  c5.addToggle("connectedOnly")
+    .setLabel("connOnly")
+    .setPosition(x+bS*2, y)
+    .setWidth(bW).setHeight(h)
+    .setColor(gray);
+
+  y+=dY*2;
+
   c5.addButton("exprtBds") // << the button calls the function exprtBds
     .setLabel("Xport")
-    .setPosition(x+bS*2, y)
+    .setPosition(x, y)
     .setWidth(bW).setHeight(h)
     .setColor(gray)
     .getCaptionLabel().getStyle().marginTop=13;
@@ -142,5 +154,5 @@ void saveImg(int val) {
 }
 
 void exprtBds(int val) {
-  exportBodies(agents, "_struct_topoXt");
+  exportBodies(agents, "_struct_topoXt", connectedOnly);
 }

@@ -67,6 +67,7 @@ void setup() {
 
   size(1400, 900, P3D);
   //fullScreen(P3D); // uncheck this and check size() to see the sketch fullscreen
+  surface.setSize(displayWidth-20, displayHeight-80);
   smooth(8);
 
   cam = new PeasyCam(this, 500);
@@ -101,7 +102,7 @@ void draw() {
       }
     } else {
       for (AgentBody a : agents) {
-        a.update(agents, 80, 80, 10);
+        a.update(agents, cR, aR, sR, cI, aI, sI); // cR, aR, sR, cI, aI, sI
         a.alignWithField(field, fA);
         a.displayBody(color(255),1);
       }
@@ -156,6 +157,6 @@ void keyPressed() {
   if (key==' ') go = !go;
   if (key=='l') lock = true;
   if (key=='d') debugView = !debugView;
-  if (key=='e') exportBodies(agents, "_struct_topoXt");
+  if (key=='e') exportBodies(agents, "_struct_topoXt", connectedOnly);
   if (key=='o') viewOct = !viewOct;
 }

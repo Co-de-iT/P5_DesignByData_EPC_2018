@@ -37,11 +37,11 @@ class AgentBody {
     this(pos, vel, id, 0, locked); // creates a standard Body, type 0 (3-fork)
   }
 
-  void update(AgentBody[] agents, float cR, float aR, float sR) {
+  void update(AgentBody[] agents, float cR, float aR, float sR, float cI, float aI, float sI) {
     if (!locked) { 
-      cohesion(agents, cR);
-      separation(agents, sR);
-      alignWithNeighbors(agents, aR);
+      cohesion(agents, cR, cI);
+      separation(agents, sR, sI);
+      alignWithNeighbors(agents, aR, aI);
     } else {
       if (!aligned) alignBody();
       if (!connected) {
@@ -50,7 +50,7 @@ class AgentBody {
     }
   }
 
-  void cohesion(AgentBody[] agents, float cR) {
+  void cohesion(AgentBody[] agents, float cR, float cI) {
 
     Vec3D steer = new Vec3D();
     int cC=0;
@@ -65,14 +65,14 @@ class AgentBody {
     }
     if (cC >0 && cC < 20) {
       steer.scaleSelf(1/(float)cC);
-      steer.scaleSelf(maxForce*0.1);
+      steer.scaleSelf(maxForce*cI);
       pos.addSelf(steer);
       // vel.normalize();
       plane = new Plane(pos, vel);
     }
   }
 
-  void separation(AgentBody[] agents, float sR) {
+  void separation(AgentBody[] agents, float sR, float sI) {
 
     Vec3D steer = new Vec3D();
     int sC=0;
@@ -87,14 +87,14 @@ class AgentBody {
     }
     if (sC >0) {
       steer.scaleSelf(1/(float)sC);
-      steer.scaleSelf(maxForce*5);
+      steer.scaleSelf(maxForce*sI);
     }
     pos.addSelf(steer);
     // vel.normalize();
     plane = new Plane(pos, vel);
   }
 
-  void alignWithNeighbors(AgentBody[] agents, float aR) {
+  void alignWithNeighbors(AgentBody[] agents, float aR, float aI) {
     Vec3D steer = new Vec3D();
     int aC=0;
 
@@ -108,7 +108,7 @@ class AgentBody {
     }
     if (aC >0) {
       steer.scaleSelf(1/(float)aC);
-      steer.scaleSelf(maxForce);
+      steer.scaleSelf(maxForce*aI);
     }
     vel.addSelf(steer);
     vel.normalize();
@@ -165,8 +165,8 @@ class AgentBody {
               // if other tip hasn't reached max connections
               if (ot.connections.size()<ot.maxConn) {
                 target = ot.sub(t); // find target direction
-                // if other tip is within search radius 
-                if (target.magSquared()< rr) {
+                // if other tip is within search radius & I haven't reached the maximum connections
+                if (target.magSquared()< rr && t.connections.size() < t.maxConn) {
                   //if (dir.angleBetween(target, true)<t.angVis) { // and within vision angle - visAng filter not working >> check
                   // inAngle++;  
 

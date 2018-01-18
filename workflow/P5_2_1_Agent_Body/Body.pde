@@ -32,6 +32,13 @@ class Body {
     this(0);
   }
 
+  Body(Tip[] tips, Vec3D forward, int type) {
+    this.tips = tips;
+    this.forward = forward;
+    this.type = type;
+    locked = false;
+  }
+
   void scale(float sf) {
     for (Tip t : tips) {
       t.subSelf(core).scaleSelf(sf).addSelf(core);
@@ -43,6 +50,9 @@ class Body {
     int maxConn = 3;
     switch (type) {
     case 0:
+      importAgentBody("body.txt");
+      break;
+    case 1:
       // tri-fork asymmetrical shape
       core = new Vec3D();
       forward = new Vec3D(0, 0, 1);
@@ -58,7 +68,7 @@ class Body {
       scale(1.5);
       break; 
 
-    case 1 : 
+    case 2 : 
       // quad cross
       core = new Vec3D();
       forward = new Vec3D(0, 0, 1);
@@ -66,29 +76,65 @@ class Body {
       pos = new Vec3D(10, 0, -3).rotateZ(PI*0.4);
       tips[0] = new Tip(pos, core, 0, tipRad, angVis, 0.01, maxConn);
       pos = new Vec3D(13, 0, 0).rotateZ(PI*0.7);
-      tips[1] = new Tip(pos, core,1, tipRad, angVis, 0.01, maxConn);
+      tips[1] = new Tip(pos, core, 1, tipRad, angVis, 0.01, maxConn);
       pos = new Vec3D(15, 0, 4).rotateZ(PI*1.25);
-      tips[2] = new Tip(pos, core,2, tipRad, angVis, 0.01, maxConn);
+      tips[2] = new Tip(pos, core, 2, tipRad, angVis, 0.01, maxConn);
       pos = new Vec3D(15, 0, 0).rotateZ(PI*1.7);
-      tips[3] = new Tip(pos, core,3, tipRad, angVis, 0.01, maxConn);
+      tips[3] = new Tip(pos, core, 3, tipRad, angVis, 0.01, maxConn);
 
       break;
-    case 2:
+    case 3:
       // tripod
       core = new Vec3D();
       forward = new Vec3D(0, 0, 1);
       tips = new Tip[3];
       pos = new Vec3D(10, 0, 0);
-      tips[0] = new Tip(pos, core,0, tipRad, angVis, 0.01, maxConn); // because base is (0,0,0)
+      tips[0] = new Tip(pos, core, 0, tipRad, angVis, 0.01, maxConn); // because base is (0,0,0)
       pos = new Vec3D(0, 10, 0);
-      tips[1] = new Tip(pos, core,1, tipRad, angVis, 0.01, maxConn);
+      tips[1] = new Tip(pos, core, 1, tipRad, angVis, 0.01, maxConn);
       pos = new Vec3D(0, 0, 10);
-      tips[2] = new Tip(pos, core,2, tipRad, angVis, 0.01, maxConn);
+      tips[2] = new Tip(pos, core, 2, tipRad, angVis, 0.01, maxConn);
       break;
     }
   }
 
   void update() {
     // if the body has autonomous functions for update
+  }
+
+  void importAgentBody(String fileName) {
+
+    Vec3D pos;
+
+    // load file and split lines into separate strings
+    String[] txtLines = loadStrings(dataPath(fileName));
+
+    // core is always (0,0,0)
+    core=new Vec3D();
+    // default forward is Z axis
+    forward = new Vec3D(0, 0, 1);
+    tips = new Tip[txtLines.length-1];
+
+    // loop thru them
+    for (int i = 0; i < txtLines.length; ++i) {
+
+      //splits into elements
+      String[] arrToks = split(txtLines[i], ',');
+
+      //separates coords point
+      //String[] arrToks = split(elements[0], ',');
+      float xx = Float.valueOf(arrToks[0]);
+      float yy = Float.valueOf(arrToks[1]);
+      float zz = Float.valueOf(arrToks[2]);
+      pos = new Vec3D(xx, yy, zz);
+      if (i==0) {
+        // first line is the forward dir
+        forward = new Vec3D(pos);
+      } else {
+        //add pt to tips array
+
+        tips[i-1] = new Tip(pos, core, i-1, tipRad, angVis, 0.01, 3);
+      }
+    }
   }
 }
