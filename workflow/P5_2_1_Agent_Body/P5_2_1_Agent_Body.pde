@@ -22,7 +22,7 @@
  
  _ in here
  . body type
- . body: forward direction, tips number and position, tips search radius
+ . body: forward direction, tips number and position, tips search radius // now loads from file exported from GH
  . agent body behavior
  . connection behavior
  . export filename
@@ -47,10 +47,10 @@
  
  agent color code
  
-  gery/cyan: paused
-  white: active
-  black: aligned
-  pink: connected
+ grey/cyan: paused
+ white: active
+ black: aligned
+ pink: connected
  
  */
 
@@ -104,12 +104,12 @@ void draw() {
       for (AgentBody a : agents) {
         a.update(agents, cR, aR, sR, cI, aI, sI); // cR, aR, sR, cI, aI, sI
         a.alignWithField(field, fA);
-        a.displayBody(color(255),1);
+        a.displayBody(color(255), 1);
       }
     }
   } else { // just display
     for (AgentBody a : agents) {
-      a.displayBody(color(100, 120, 120),3);
+      a.displayBody(color(100, 120, 120), 3);
     }
   }
 
@@ -118,7 +118,7 @@ void draw() {
   if (fieldDisp) {
     for (TensorPt t : field) {
       //t.display(color(255), 1, color(255, 0, 0), 20);
-      t.display(1, 20);
+      t.display(1, 20); // display field with normal direction colors
     }
   }
 
@@ -138,25 +138,44 @@ void draw() {
 
   if (vidRec) {
     saveFrame("video/AgentBodyMesh_####.jpg");
-    cam.beginHUD();
-    pushStyle();
-    noStroke();
-    fill(255, 0, 0);
-    rect(10, 10, 10, 10);
-    popStyle();
-    cam.endHUD();
+  }
+
+  if (saveImg) {
+    saveFrame("img/AgentBody_####.png");
+    saveImg = false;
   }
 
   dispGUI();
 }
 
 void keyPressed() {
-  if (key =='i') saveFrame("img/AgentBody_####.png");
-  if (key=='v') vidRec = !vidRec;
-  if (key=='f') fieldDisp = !fieldDisp;
-  if (key==' ') go = !go;
-  if (key=='l') lock = true;
-  if (key=='d') debugView = !debugView;
-  if (key=='e') exportBodies(agents, "_struct_topoXt", connectedOnly);
-  if (key=='o') viewOct = !viewOct;
+  if (key =='i') saveImg = true;
+  if (key=='v') {
+    vidRec = !vidRec;
+    Toggle t = (Toggle)c5.getController("vidRec"); // changes toggle state when using keyPressed
+    t.setState(vidRec);
+  }
+  if (key=='f') {
+    fieldDisp = !fieldDisp;
+    Toggle t = (Toggle)c5.getController("fieldDisp"); // changes toggle state when using keyPressed
+    t.setState(fieldDisp);
+  }
+  if (key==' ') { 
+    go = !go;
+    Toggle t = (Toggle)c5.getController("go");
+    t.setState(go);
+  }
+  if (key=='l') {
+    lock = true;
+    Toggle t = (Toggle)c5.getController("lock");
+    t.setState(lock);
+  }
+  if (key=='d') {
+    debugView = !debugView;
+    Toggle t = (Toggle)c5.getController("debugView");
+    t.setState(debugView);
+  }
+  if (key=='e') exprtBds(0);
+  //exportBodies(agents, exportFile, connectedOnly);
+  //if (key=='o') viewOct = !viewOct;
 }

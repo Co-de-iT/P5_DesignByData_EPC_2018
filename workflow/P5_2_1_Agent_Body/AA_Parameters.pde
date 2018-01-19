@@ -18,8 +18,19 @@ ToxiclibsSupport gfx;
 PeasyCam cam;
 TensorPt[] field;
 PointOctree fieldOct;
+String exportFile = "_struct_topoXt";
 
 ControlP5 c5;
+float c5x=10, c5y = 20;
+int c5w=210, c5h=10; // width/height of sliders, height of buttons
+float c5dY = c5h+10;
+int c5bW = 85;
+int c5bS = 120; // bS should be bW+(space between buttons)
+
+boolean dispMsg, dispMsgStart;
+String msg;
+float time = 3000;
+float tStart;
 
 String timeStamp;
 
@@ -31,3 +42,4 @@ boolean lock = false;
 boolean agentsLocked = false;
 boolean go = false;
 boolean connectedOnly = false;
+boolean saveImg = false;
