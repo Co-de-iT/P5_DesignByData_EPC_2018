@@ -65,9 +65,9 @@ import java.util.*;
 
 void setup() {
 
-  //size(1400, 900, P3D);
+  size(1400, 900, P3D);
   //surface.setSize(displayWidth-20, displayHeight-80);
-  fullScreen(P3D); // uncheck this and check size() to see the sketch fullscreen
+  //fullScreen(P3D); // uncheck this and check size() to see the sketch fullscreen
   
   smooth(8);
 
